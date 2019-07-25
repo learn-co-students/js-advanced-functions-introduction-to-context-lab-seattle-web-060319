@@ -1,49 +1,62 @@
-// Your code here
-function createEmployeeRecord(arg){
+function createEmployeeRecord(argument) {
     return {
-    firstName : arg[0],
-    familyName : arg[1],
-    title : arg[2],
-    payPerHour : arg[3],
-    timeInEvents : [],
-    timeOutEvents : [],
+      firstName: argument[0],
+      familyName: argument[1],
+      title: argument[2],
+      payPerHour: argument[3],
+      timeInEvents: [],
+      timeOutEvents: []
     }
-}
-
-function createEmployees(array){
-    return array.map(arr => (createEmployeeRecord(arr)))
-}
-
-function createTimeInEvent(recorObj, dateStamp){
+  }
+  
+   function createEmployees(array) {
+    return array.map(arr => createEmployeeRecord(arr));
+  }
+  
+   function createTimeInEvent(recordObject, dateStamp) {
     let [date, hour] = dateStamp.split(' ');
     let timeInEvent = {
-        type : 'TimeIn',
-        date : date,
-        hour : Number(hour)
+      type: 'TimeIn',
+      hour: Number(hour),
+      date: date
     };
-    recorObj.timeInEvents.push(timeInEvent)
-    return recorObj
-}
-
-function createTimeOutEvent(recorObj, dateStamp){
+    recordObject.timeInEvents.push(timeInEvent);
+    return recordObject;
+  }
+  
+   function createTimeOutEvent(recordObject, dateStamp) {
     let [date, hour] = dateStamp.split(' ');
     let timeOutEvent = {
-        type : 'TimeOut',
-        date : date,
-        hour : Number(hour)
+      type: 'TimeOut',
+      hour: Number(hour),
+      date: date
     };
-    recorObj.timeOutEvents.push(timeOutEvent)
-    return recorObj
-}
-function hoursWorkedOnDate(recorObj, dateStamp){
-    const TimeIn =  recorObj.timeInEvents.find(timeIn => timeIn.date == dateStamp).hour
-    const TimeOut =  recorObj.timeOutEvents.find(timeOut => timeOut.date == dateStamp).hour
-    return (TimeIn - TimeOut)/100
-}
-function wagesEarnedOnDate(recorObj, dateStamp){
-    return hoursWorkedOnDate(recordObj, dateStamp) * recordObj.payPerHour;
-}
-
-function allWagesFor(recordObj) {
-  return recordObj.timeInEvents.map(record => wagesEarnedOnDate(recordObj, record.date)).reduce((a, b) => a + b);
-}
+    recordObject.timeOutEvents.push(timeOutEvent);
+    return recordObject;
+  }
+  
+   function hoursWorkedOnDate(recordObject, dateStamp) {
+    const timeInHour = recordObject.timeInEvents.find(timeIn => timeIn.date == dateStamp).hour;
+    const timeOutHour = recordObject.timeOutEvents.find(timeOut => timeOut.date == dateStamp).hour;
+    return (timeOutHour - timeInHour)/100;
+  }
+  
+   function wagesEarnedOnDate(recordObject, dateStamp) {
+    return hoursWorkedOnDate(recordObject, dateStamp) * recordObject.payPerHour;
+  }
+  
+   function allWagesFor(recordObject) {
+    return recordObject.timeInEvents.map(record => wagesEarnedOnDate(recordObject, record.date)).reduce((a, b) => a + b);
+  }
+  
+   function createEmployeeRecords(array) {
+    return array.map(record => createEmployeeRecord(record));
+  }
+  
+   function findEmployeebyFirstName(srcArray, firstName) {
+    return srcArray.find(record => record.firstName == firstName);
+  }
+  
+   function calculatePayroll(array) {
+    return array.map(employeeRecord => employeeRecord.timeInEvents.map(record => wagesEarnedOnDate(employeeRecord, record.date)).reduce((a, b) => a + b)).reduce((a, b) => a + b);
+  }
