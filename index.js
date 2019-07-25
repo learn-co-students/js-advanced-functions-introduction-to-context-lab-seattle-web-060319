@@ -70,8 +70,14 @@ function findEmployeebyFirstName(srcArray, firstName) {
 }
 
 function calculatePayroll(employeesArray) {
-    let employees_hours = employeesArray.map(record => allWagesFor(record))
+    let p2 = 0
+    let employees_hours = employeesArray.map(record => {
+        p2 += allWagesFor(record)
+        console.log(p2)
+        return allWagesFor(record)
+    })
     let rfx = (memo, value) => memo + value
     let payroll = employees_hours.reduce(rfx)
+    console.log(p2)
     return payroll
 }
